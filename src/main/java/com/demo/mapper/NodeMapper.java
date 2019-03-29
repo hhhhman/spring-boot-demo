@@ -56,5 +56,7 @@ public interface NodeMapper {
     @Delete("delete from node where node_id = #{node_id}")
     public void deleteNodeById(@Param("node_id") Integer node_id);
 
+    @Update(("update node set node_state = '已删除' where node_id = #{node_id}"))
+    public void updateStateById(@Param("node_id") Integer node_id);
 
 }

@@ -97,7 +97,13 @@ public class NodeServiceImpl implements NodeService {
     }
 
     public void deleteNodeById(Integer node_id) {
-        nodeMapper.deleteNodeById(node_id);
+        String node_level = nodeMapper.selectLevelById(node_id);
+        if(node_level.matches("^[0-9]+.*")) {
+            nodeMapper.updateStateById(node_id);
+        } else {
+            nodeMapper.deleteNodeById(node_id);
+        }
+
     }
 
 
