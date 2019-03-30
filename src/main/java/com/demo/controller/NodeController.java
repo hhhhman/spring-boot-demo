@@ -91,7 +91,7 @@ public class NodeController {
     /**
      * 增加节点
      *
-     * @param node_id   节点编号
+     * @param node_id   父节点的id
      * @param node_name 节点名称
      * @param node_desc 节点描述
      * @return  增加成功返回success，失败返回error
