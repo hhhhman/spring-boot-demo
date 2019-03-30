@@ -55,7 +55,6 @@ public class NodeServiceImpl implements NodeService {
 
     public List<Node> findNodesByName(String node_name, Integer node_id) {
         String node_level=nodeMapper.selectLevelById(node_id);
-        System.out.println("查询出来的节点的level"+node_level);
         List<String> levelList = nodeMapper.selectLevelsByName(node_name, node_level);
         levelList.addAll(nodeMapper.selectChildLevelsByName(node_name, node_level));
         Set<String> levelSet = new HashSet<>();
@@ -98,7 +97,8 @@ public class NodeServiceImpl implements NodeService {
 
         String level = nodeMapper.selectLevelById(node_id);
         String node_level = level + "." + end;
-        nodeMapper.insertChildNode(node_level, node_name, node_desc, node_id);
+        Integer node_pid = node_id;
+        nodeMapper.insertChildNode(node_level, node_name, node_desc, node_pid);
     }
 
     public void updateNodeById(String node_name, String node_desc, Integer node_id) {
@@ -108,9 +108,9 @@ public class NodeServiceImpl implements NodeService {
     public void deleteNodeById(Integer node_id) {
         String node_level = nodeMapper.selectLevelById(node_id);
         if(node_level.matches("^[0-9]+.*")) {
-            nodeMapper.updateStateById(node_id);
-        } else {
             nodeMapper.deleteNodeById(node_id);
+        } else {
+            nodeMapper.updateStateById(node_id);
         }
 
     }

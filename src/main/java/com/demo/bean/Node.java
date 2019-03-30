@@ -14,16 +14,10 @@ public class Node implements Serializable{
 	private String node_desc;
 	private String node_state;
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	private Integer node_pid;
-	private String title;
+
 
 	private List<Node> children;
 

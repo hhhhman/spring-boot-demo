@@ -98,6 +98,7 @@ public class NodeController {
      */
     @PostMapping(value = "/insertNode")
     public String insertChildNode(Integer node_id, String node_name, String node_desc) {
+        System.out.println("node_id:"+node_id);
         try {
             nodeService.insertChildNode(node_id, node_name, node_desc);
             return "success";
