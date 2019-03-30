@@ -32,7 +32,7 @@ public class NodeServiceImpl implements NodeService {
     @Override
     public int addNode(String node_name, String node_desc) {
         String count = this.nodeMapper.countByLevel();
-        int ret = this.nodeMapper.addNode(node_name, node_desc, count);
+        int ret = this.nodeMapper.addNode(node_name, node_desc, count)+1;
         System.out.println(ret);
         return ret;
     }
@@ -43,16 +43,23 @@ public class NodeServiceImpl implements NodeService {
         return nodeMapper.selectChildNodesById(node_id);
     }
 
+    @Override
+    public List<Node> selectChildNodesById1(Integer node_id) {
+        return nodeMapper.selectChildNodesById1(node_id);
+    }
+
     /*
      * levelList: 存放所有通过node_name查询到的数据的node_level levelSet: 存放所查到的若干子结点到根结点的路径
      * resultList: 存放最终结果集
      */
 
-    public List<Node> findNodesByName(String node_name, String node_level) {
+    public List<Node> findNodesByName(String node_name, Integer node_id) {
+        String node_level=nodeMapper.selectLevelById(node_id);
+        System.out.println("查询出来的节点的level"+node_level);
         List<String> levelList = nodeMapper.selectLevelsByName(node_name, node_level);
         levelList.addAll(nodeMapper.selectChildLevelsByName(node_name, node_level));
-        Set<String> levelSet = new HashSet<String>();
-        List<Node> resultList = new ArrayList<Node>();
+        Set<String> levelSet = new HashSet<>();
+        List<Node> resultList = new ArrayList<>();
         for (int i = 0; i < levelList.size(); i++) {
             String str = levelList.get(i);
             levelSet.add(str);
@@ -74,22 +81,24 @@ public class NodeServiceImpl implements NodeService {
 
     public void insertChildNode(Integer node_id, String node_name, String node_desc) {
         List<String> levelList = nodeMapper.selectChildLevelsById(node_id);
-        List<Integer> endList = new ArrayList<Integer>();
-        for (int i = 0; i < levelList.size(); i++) {
-            String str = levelList.get(i);
-            endList.add(Integer.parseInt(str.substring(str.lastIndexOf(".") + 1)));
-        }
-        Collections.sort(endList);
-        Integer end = endList.get(endList.size() - 1) + 1;
-        String level = nodeMapper.selectLevelById(node_id);
-        String node_level = null;
-        if (level.contains(".")) {
-            node_level = level.substring(0, level.lastIndexOf(".") + 1) + end;
+        System.out.println(levelList);
+        int end;
+        if (levelList.isEmpty()) {
+            end = 1;
         } else {
-            node_level = level + "." + end;
+            List<Integer> endList = new ArrayList<>();
+            for (int i = 0; i < levelList.size(); i++) {
+                String str = levelList.get(i);
+                endList.add(Integer.parseInt(str.substring(str.lastIndexOf(".") + 1)));
+            }
+            Collections.sort(endList);
+            end = endList.get(endList.size() - 1) + 1;
         }
-        Integer node_pid = node_id;
-        nodeMapper.insertChildNode(node_level, node_name, node_desc, node_pid);
+
+
+        String level = nodeMapper.selectLevelById(node_id);
+        String node_level = level + "." + end;
+        nodeMapper.insertChildNode(node_level, node_name, node_desc, node_id);
     }
 
     public void updateNodeById(String node_name, String node_desc, Integer node_id) {

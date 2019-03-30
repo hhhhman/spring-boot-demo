@@ -6,19 +6,21 @@ import com.demo.bean.Node;
 
 public interface NodeService {
 
-    public List<Node> findNodeAll();
+    List<Node> findNodeAll();
 
-    public List<Node> selectByName(String name);
+    List<Node> selectByName(String name);
 
-    public int addNode(String node_name, String node_desc);
+    int addNode(String node_name, String node_desc);
 
-    public List<Node> selectChildNodesById(Integer node_id);
+    List<Node> selectChildNodesById(Integer node_id);
 
-    public List<Node> findNodesByName(String node_name, String node_level);
+    List<Node> selectChildNodesById1(Integer node_id);
 
-    public void insertChildNode(Integer node_id, String node_name, String node_desc);
+    List<Node> findNodesByName(String node_name, Integer node_id);
 
-    public void updateNodeById(String node_name, String node_desc, Integer node_id);
+    void insertChildNode(Integer node_id, String node_name, String node_desc);
 
-    public void deleteNodeById(Integer node_id);
+    void updateNodeById(String node_name, String node_desc, Integer node_id);
+
+    void deleteNodeById(Integer node_id);
 }

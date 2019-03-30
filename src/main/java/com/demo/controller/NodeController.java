@@ -2,13 +2,7 @@ package com.demo.controller;
 
 import java.util.List;
 
-import com.demo.App;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Controller;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.*;
 
 import com.demo.bean.Node;
@@ -27,26 +21,26 @@ public class NodeController {
     @GetMapping("/knowledgeTree")
     public List<Node> findNodeAll() {
         List<Node> list = this.nodeService.findNodeAll();
-        List<Node> result = toTree.listToTree(list);
-        return result;
+        return toTree.listToTree(list);
     }
 
     /**
      * 通过名称查询
+     *
      * @param name 节点的名称
-     * @return
+     * @return 查询到的节点的列表
      */
     @GetMapping("/knowledgeTree/{name}")
     public List<Node> selectByName(@PathVariable String name) {
-        List<Node> list = this.nodeService.selectByName(name);
-        return list;
+        return this.nodeService.selectByName(name);
     }
 
     /**
      * 主界面增加节点
+     *
      * @param node_name 节点姓名
      * @param node_desc 节点描述
-     * @return
+     * @return 成功返回success，失败返回error
      */
     @PostMapping("/addNode")
     public String addNode(String node_name, String node_desc) {
@@ -58,38 +52,52 @@ public class NodeController {
     }
 
     /**
-     * 子界面通过id查询节点所有子节点
-     * @param node_id
-     * @return
+     * 子界面通过id查询当前节点以及子节点
+     *
+     * @param node_id 节点id
+     * @return 返回查到的两层节点
      */
     @GetMapping("/selectChilds/{node_id}")
     public List<Node> selectChildNodesById(@PathVariable("node_id") Integer node_id) {
-        return nodeService.selectChildNodesById(node_id);
+        List<Node> list = nodeService.selectChildNodesById(node_id);
+        return toTree.listToTree(list);
+    }
+
+    /**
+     * 子界面通过id查询节点下一层的子节点
+     *
+     * @param node_id 节点id
+     * @return 返回查询到的下一层子节点
+     */
+    @GetMapping("/selectChilds1/{node_id}")
+    public List<Node> selectChildNodesById1(@PathVariable("node_id") Integer node_id) {
+        return nodeService.selectChildNodesById1(node_id);
     }
 
     /**
      * 通过名字模糊查询节点
+     *
      * @param node_name 节点名称
-     * @param node_level 节点层级
-     * @return
+     * @param node_id   节点id
+     * @return  返回查询到的节点数组
      */
-    @GetMapping(value = "/findNodes/{node_name}/{node_level}")
+    @GetMapping(value = "/findNodes/{node_name}")
     public List<Node> findNodesByName(@PathVariable("node_name") String node_name,
-                                      @PathVariable("node_level") String node_level) {
-        return nodeService.findNodesByName(node_name, node_level);
+                                      Integer node_id) {
+        List<Node> list = nodeService.findNodesByName(node_name, node_id);
+        return toTree.listToTree(list);
     }
 
     /**
      * 增加节点
-     * @param node_id 节点编号
+     *
+     * @param node_id   节点编号
      * @param node_name 节点名称
      * @param node_desc 节点描述
-     * @return
+     * @return  增加成功返回success，失败返回error
      */
-    @PostMapping(value = "/insertNode/{node_id}/{node_name}/{node_desc}")
-    public String insertChildNode(@PathVariable("node_id") Integer node_id,
-                                  @PathVariable("node_name") String node_name,
-                                  @PathVariable("node_desc") String node_desc) {
+    @PostMapping(value = "/insertNode")
+    public String insertChildNode(Integer node_id, String node_name, String node_desc) {
         try {
             nodeService.insertChildNode(node_id, node_name, node_desc);
             return "success";
@@ -101,10 +109,16 @@ public class NodeController {
     }
 
 
-    @PutMapping("/updateNode/{node_id}/{node_name}/{node_desc}")
-    public String updateNodeById(@PathVariable("node_name") String node_name,
-                                 @PathVariable("node_desc") String node_desc,
-                                 @PathVariable("node_id") Integer node_id) {
+    /**
+     * 通过id来更新节点的名称和描述
+     *
+     * @param node_name 节点名称
+     * @param node_desc 节点描述
+     * @param node_id   节点id
+     * @return 增加成功返回success，失败返回error
+     */
+    @PutMapping("/updateNode")
+    public String updateNodeById(String node_name, String node_desc, Integer node_id) {
         try {
             nodeService.updateNodeById(node_name, node_desc, node_id);
             return "success";
@@ -114,6 +128,12 @@ public class NodeController {
         }
     }
 
+    /**
+     * 通过编号来删除节点
+     *
+     * @param node_id 节点id
+     * @return 删除成功返回success，失败返回error
+     */
     @DeleteMapping("/deleteNode/{node_id}")
     public String deleteNodeById(@PathVariable("node_id") Integer node_id) {
         try {

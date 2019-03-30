@@ -6,16 +6,24 @@ import java.util.List;
 
 
 public class Node implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private Integer node_id;
 	private String node_name;
 	private String node_desc;
 	private String node_state;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	private Integer node_pid;
+	private String title;
 
 	private List<Node> children;
 
@@ -76,6 +84,6 @@ public class Node implements Serializable{
 		return "Node [node_id=" + node_id + ", node_name=" + node_name + ", node_desc=" + node_desc + ", node_state="
 				+ node_state + ", node_pid=" + node_pid + ", children=" + children + "]";
 	}
-	
-	
+
+
 }
