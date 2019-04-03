@@ -97,14 +97,12 @@ public class NodeController {
      * @return  增加成功返回success，失败返回error
      */
     @PostMapping(value = "/insertNode")
-    public String insertChildNode(Integer node_id, String node_name, String node_desc) {
-        System.out.println("node_id:"+node_id);
+    public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         try {
-            nodeService.insertChildNode(node_id, node_name, node_desc);
-            return "success";
+            return nodeService.insertChildNode(node_id, node_name, node_desc);
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
+            return -2;
         }
 
     }

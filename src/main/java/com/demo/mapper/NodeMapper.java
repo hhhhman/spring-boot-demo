@@ -18,7 +18,7 @@ public interface NodeMapper {
     @Select("SELECT count(node_level) from node where node_level not like '%.%'")
     String countByLevel();
 
-    @Insert("insert into node values (null, #{count}, #{node_name}, '使用中', #{node_desc}, 0)")
+    @Insert("insert into node values (null, #{count}, #{node_name}, #{node_desc},'使用中',0)")
     int addNode(@Param("node_name") String node_name, @Param("node_desc") String node_desc, @Param("count") String count);
 
     //	查询语句相关
@@ -41,9 +41,12 @@ public interface NodeMapper {
     @Select("select node_level from node where node_pid = #{node_id}")
     List<String> selectChildLevelsById(@Param("node_id") Integer id);
 
-    @Insert("insert into node values (null, #{node_level}, #{node_name}, '使用中', #{node_desc}, #{node_pid})")
+    @Insert("insert into node values (null, #{node_level}, #{node_name}, #{node_desc},'使用中', #{node_pid})")
     void insertChildNode(@Param("node_level") String node_level, @Param("node_name") String node_name,
                          @Param("node_desc") String node_desc, @Param("node_pid") Integer node_pid);
+
+    @Select("select node_id from node where node_name=#{node_name}")
+    List<Integer> selectIdByName(@Param("node_name") String node_name);
 
     @Select("select node_level from node where node_id = #{node_id}")
     String selectLevelById(@Param("node_id") Integer node_id);

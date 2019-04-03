@@ -10,6 +10,9 @@ import com.demo.bean.Node;
 import com.demo.mapper.NodeMapper;
 import com.demo.service.NodeService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 
 @Service
 @Transactional
@@ -32,8 +35,7 @@ public class NodeServiceImpl implements NodeService {
     @Override
     public int addNode(String node_name, String node_desc) {
         String count = this.nodeMapper.countByLevel();
-        int ret = this.nodeMapper.addNode(node_name, node_desc, count)+1;
-        System.out.println(ret);
+        int ret = this.nodeMapper.addNode(node_name, node_desc, count + 1);
         return ret;
     }
 
@@ -54,7 +56,7 @@ public class NodeServiceImpl implements NodeService {
      */
 
     public List<Node> findNodesByName(String node_name, Integer node_id) {
-        String node_level=nodeMapper.selectLevelById(node_id);
+        String node_level = nodeMapper.selectLevelById(node_id);
         List<String> levelList = nodeMapper.selectLevelsByName(node_name, node_level);
         levelList.addAll(nodeMapper.selectChildLevelsByName(node_name, node_level));
         Set<String> levelSet = new HashSet<>();
@@ -78,7 +80,7 @@ public class NodeServiceImpl implements NodeService {
      * 存放node_level的尾部
      */
 
-    public void insertChildNode(Integer node_id, String node_name, String node_desc) {
+    public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         List<String> levelList = nodeMapper.selectChildLevelsById(node_id);
         System.out.println(levelList);
         int end;
@@ -99,6 +101,15 @@ public class NodeServiceImpl implements NodeService {
         String node_level = level + "." + end;
         Integer node_pid = node_id;
         nodeMapper.insertChildNode(node_level, node_name, node_desc, node_pid);
+        List<Integer> list = nodeMapper.selectIdByName(node_name);
+        if (list.size() > 1) {
+            for (Integer id : list) {
+                nodeMapper.deleteNodeById(id);
+            }
+            return -1;
+        } else {
+            return list.get(0);
+        }
     }
 
     public void updateNodeById(String node_name, String node_desc, Integer node_id) {
@@ -107,7 +118,7 @@ public class NodeServiceImpl implements NodeService {
 
     public void deleteNodeById(Integer node_id) {
         String node_level = nodeMapper.selectLevelById(node_id);
-        if(node_level.matches("^[0-9]+.*")) {
+        if (node_level.matches("^[0-9]+.*")) {
             nodeMapper.deleteNodeById(node_id);
         } else {
             nodeMapper.updateStateById(node_id);

@@ -18,7 +18,7 @@ public interface NodeService {
 
     List<Node> findNodesByName(String node_name, Integer node_id);
 
-    void insertChildNode(Integer node_id, String node_name, String node_desc);
+    Integer insertChildNode(Integer node_id, String node_name, String node_desc);
 
     void updateNodeById(String node_name, String node_desc, Integer node_id);
 
