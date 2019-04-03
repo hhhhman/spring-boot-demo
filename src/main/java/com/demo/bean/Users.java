@@ -1,12 +1,14 @@
 package com.demo.bean;
 
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
+    @NotNull
     private Integer n_id;
     private String n_name;
     private String n_role;

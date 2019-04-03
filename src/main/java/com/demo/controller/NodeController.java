@@ -3,14 +3,20 @@ package com.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.demo.bean.Node;
 import com.demo.service.NodeService;
 import com.demo.util.toTree;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/node")
+@Validated
 public class NodeController {
     @Autowired
     private NodeService nodeService;
@@ -82,8 +88,7 @@ public class NodeController {
      * @return  返回查询到的节点数组
      */
     @GetMapping(value = "/findNodes/{node_name}")
-    public List<Node> findNodesByName(@PathVariable("node_name") String node_name,
-                                      Integer node_id) {
+    public List<Node> findNodesByName(@PathVariable("node_name") String node_name, @NotNull Integer node_id) {
         List<Node> list = nodeService.findNodesByName(node_name, node_id);
         return toTree.listToTree(list);
     }

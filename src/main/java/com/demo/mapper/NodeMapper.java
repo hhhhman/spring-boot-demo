@@ -8,23 +8,34 @@ import com.demo.bean.Node;
 
 public interface NodeMapper {
 
-    //@Select("select node_id,node_level,node_name,node_name as title,node_state,node_desc,node_pid from node WHERE node_pid =0")
+    //查询所有的二级节点
     @Select("select * from node WHERE node_pid =0")
     List<Node> selectNodeAll();
 
-    @Select("select * from node WHERE  node_pid =0 and node_name like '%${nodename}%'")
+    //模糊查询二级根节点
+    @Select("select * from node WHERE  node_pid =0 and node_name like '%${nodename}%' or node_desc like '%${nodename}%'")
     List<Node> selectName(@Param("nodename") String nodename);
 
+    //查询二级节点的数量
     @Select("SELECT count(node_level) from node where node_level not like '%.%'")
     String countByLevel();
 
+    //插入二级节点
     @Insert("insert into node values (null, #{count}, #{node_name}, #{node_desc},'使用中',0)")
     int addNode(@Param("node_name") String node_name, @Param("node_desc") String node_desc, @Param("count") String count);
 
-    //	查询语句相关
-    @Select("select node_level from node where node_name like '%${node_name}%' and node_level rlike '^${node_level}.*'")
+    //通过name和level模糊查询level
+    @Select("select node_level from node where node_name like '%${node_name}%' or node_desc like '%${node_name}%' and node_level rlike '^${node_level}.*'")
     List<String> selectLevelsByName(@Param("node_name") String node_name,
                                     @Param("node_level") String node_level);
+
+    //通过名字查询节点的pid
+    @Select("select pid from node where node_name=#{node_name}")
+    List<Integer> selectPidByName(@Param("node_name") String node_name);
+
+    //查询pid相同的节点
+    @Select("select * from node where node_pid=#{node_pid} and node_name !=#{node_name}")
+    List<Node> selectNodeByPid(@Param("node_pid")Integer node_pid,@Param("node_name") String node_name);
 
     @Select("select node_level from node where node_pid in (select node_id from node where node_name like '%${node_name}%' and node_level rlike '^${node_level}.*')")
     List<String> selectChildLevelsByName(@Param("node_name") String node_name,
@@ -45,9 +56,11 @@ public interface NodeMapper {
     void insertChildNode(@Param("node_level") String node_level, @Param("node_name") String node_name,
                          @Param("node_desc") String node_desc, @Param("node_pid") Integer node_pid);
 
+    //通过名称查找id
     @Select("select node_id from node where node_name=#{node_name}")
     List<Integer> selectIdByName(@Param("node_name") String node_name);
 
+    //通过id查找level
     @Select("select node_level from node where node_id = #{node_id}")
     String selectLevelById(@Param("node_id") Integer node_id);
 
@@ -63,6 +76,7 @@ public interface NodeMapper {
     @Update(("update node set node_state = '已删除' where node_id = #{node_id}"))
     void updateStateById(@Param("node_id") Integer node_id);
 
+    //通过pid查找一层节点
     @Select("select node_id, node_level,node_name, node_state, node_desc, node_pid from node where node_pid = #{node_id}")
     List<Node> selectChildNodesById1(Integer node_id);
 }

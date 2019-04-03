@@ -75,11 +75,11 @@ public class NodeServiceImpl implements NodeService {
         return resultList;
     }
 
+
     /*
      * List<String> levelList: 存放子结点的node_level List<Integer> endList:
      * 存放node_level的尾部
      */
-
     public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         List<String> levelList = nodeMapper.selectChildLevelsById(node_id);
         System.out.println(levelList);
@@ -95,8 +95,6 @@ public class NodeServiceImpl implements NodeService {
             Collections.sort(endList);
             end = endList.get(endList.size() - 1) + 1;
         }
-
-
         String level = nodeMapper.selectLevelById(node_id);
         String node_level = level + "." + end;
         Integer node_pid = node_id;
@@ -118,7 +116,7 @@ public class NodeServiceImpl implements NodeService {
 
     public void deleteNodeById(Integer node_id) {
         String node_level = nodeMapper.selectLevelById(node_id);
-        if (node_level.matches("^[0-9]+.*")) {
+        if (node_level.matches("/^[0-9]+.*/")) {
             nodeMapper.deleteNodeById(node_id);
         } else {
             nodeMapper.updateStateById(node_id);
