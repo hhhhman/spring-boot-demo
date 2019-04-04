@@ -50,7 +50,7 @@ public class NodeController {
      */
     @PostMapping("/addNode")
     public String addNode(String node_name, String node_desc) {
-        int ret = this.nodeService.addNode(node_name, node_desc);
+        int ret = this.nodeService.addNode(node_name.trim(), node_desc.trim());
         if (ret == 1) {
             return "success";
         }
@@ -77,7 +77,7 @@ public class NodeController {
      */
     @GetMapping("/selectChilds1/{node_id}")
     public List<Node> selectChildNodesById1(@PathVariable("node_id") Integer node_id) {
-        return nodeService.selectChildNodesById1(node_id);
+        return toTree.listToTree(nodeService.selectChildNodesById1(node_id));
     }
 
     /**
@@ -104,7 +104,7 @@ public class NodeController {
     @PostMapping(value = "/insertNode")
     public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         try {
-            return nodeService.insertChildNode(node_id, node_name, node_desc);
+            return nodeService.insertChildNode(node_id, node_name.trim(), node_desc.trim());
         } catch (Exception e) {
             e.printStackTrace();
             return -2;
@@ -124,7 +124,7 @@ public class NodeController {
     @PutMapping("/updateNode")
     public String updateNodeById(String node_name, String node_desc, Integer node_id) {
         try {
-            nodeService.updateNodeById(node_name, node_desc, node_id);
+            nodeService.updateNodeById(node_name.trim(), node_desc.trim(), node_id);
             return "success";
         } catch (Exception e) {
             e.printStackTrace();

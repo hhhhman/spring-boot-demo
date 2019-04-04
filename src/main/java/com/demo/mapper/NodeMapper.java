@@ -13,7 +13,7 @@ public interface NodeMapper {
     List<Node> selectNodeAll();
 
     //模糊查询二级根节点
-    @Select("select * from node WHERE  node_pid =0 and node_name like '%${nodename}%' or node_desc like '%${nodename}%'")
+    @Select("select * from node WHERE  node_pid =0 and (node_name like '%${nodename}%' or node_desc like '%${nodename}%')")
     List<Node> selectName(@Param("nodename") String nodename);
 
     //查询二级节点的数量
@@ -25,7 +25,7 @@ public interface NodeMapper {
     int addNode(@Param("node_name") String node_name, @Param("node_desc") String node_desc, @Param("count") String count);
 
     //通过name和level模糊查询level
-    @Select("select node_level from node where node_name like '%${node_name}%' or node_desc like '%${node_name}%' and node_level rlike '^${node_level}.*'")
+    @Select("select node_level from node where (node_name like '%${node_name}%' or node_desc like '%${node_name}%') and node_level rlike '^${node_level}.*'")
     List<String> selectLevelsByName(@Param("node_name") String node_name,
                                     @Param("node_level") String node_level);
 
