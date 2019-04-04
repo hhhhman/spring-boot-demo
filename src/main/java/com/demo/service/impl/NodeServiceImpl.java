@@ -35,19 +35,35 @@ public class NodeServiceImpl implements NodeService {
     @Override
     public int addNode(String node_name, String node_desc) {
         String count = this.nodeMapper.countByLevel();
-        int ret = this.nodeMapper.addNode(node_name, node_desc, count + 1);
-        return ret;
+        return this.nodeMapper.addNode(node_name, node_desc, count + 1);
     }
 
 
     //	点击一次 查询一次子结点
     public List<Node> selectChildNodesById(Integer node_id) {
-        return nodeMapper.selectChildNodesById(node_id);
+        List<Node> childList = nodeMapper.selectChildNodesById(node_id);
+        List<Node> grandsonList = new ArrayList<>();
+        List<Node> result = new ArrayList<>();
+        for (int i = 0; i < childList.size(); i++) {
+            grandsonList.addAll(nodeMapper.selectChildNodesById(childList.get(i).getNode_id()));
+        }
+        result.addAll(childList);
+        result.addAll(grandsonList);
+        result.add(nodeMapper.selectNodeById(node_id));
+        return result;
     }
 
     @Override
     public List<Node> selectChildNodesById1(Integer node_id) {
-        return nodeMapper.selectChildNodesById1(node_id);
+        List<Node> childList = nodeMapper.selectChildNodesById(node_id);
+        List<Node> grandsonList = new ArrayList<>();
+        List<Node> result = new ArrayList<>();
+        for (int i = 0; i < childList.size(); i++) {
+            grandsonList.addAll(nodeMapper.selectChildNodesById(childList.get(i).getNode_id()));
+        }
+        result.addAll(childList);
+        result.addAll(grandsonList);
+        return result;
     }
 
     /*

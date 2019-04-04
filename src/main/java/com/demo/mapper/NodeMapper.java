@@ -45,7 +45,7 @@ public interface NodeMapper {
     Node selectNodeByLevel(@Param("node_level") String node_level);
 
     //	点击一次查询一次子结点
-    @Select("select node_id, node_level,node_name, node_state, node_desc, node_pid from node where node_pid =#{node_id} or node_id =#{node_id}")
+    @Select("select node_id, node_level,node_name, node_state, node_desc, node_pid from node where node_pid =#{node_id}")
     List<Node> selectChildNodesById(@Param("node_id") Integer node_id);
 
     //	新增语句相关
@@ -79,4 +79,8 @@ public interface NodeMapper {
     //通过pid查找一层节点
     @Select("select node_id, node_level,node_name, node_state, node_desc, node_pid from node where node_pid = #{node_id}")
     List<Node> selectChildNodesById1(Integer node_id);
+
+    //通过id查询节点
+    @Select("select * from node where node_id=#{node_id}")
+    Node selectNodeById(@Param("node_id") Integer node_id);
 }
