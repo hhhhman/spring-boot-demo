@@ -18,7 +18,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
     public Map<String,Object> exceptionHandler(ConstraintViolationException e){
-        Map<String,Object> result = new HashMap<String,Object>();
+        Map<String,Object> result = new HashMap<String,Object>(16);
         result.put("respCode", "9999");
         result.put("respMsg", e.getMessage());
         result.put("respError","数据验证不通过");

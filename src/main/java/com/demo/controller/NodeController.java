@@ -3,15 +3,13 @@ package com.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.demo.bean.Node;
 import com.demo.service.NodeService;
-import com.demo.util.toTree;
+import com.demo.util.ToTree;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -27,7 +25,7 @@ public class NodeController {
     @GetMapping("/knowledgeTree")
     public List<Node> findNodeAll() {
         List<Node> list = this.nodeService.findNodeAll();
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**
@@ -66,7 +64,7 @@ public class NodeController {
     @GetMapping("/selectChilds/{node_id}")
     public List<Node> selectChildNodesById(@PathVariable("node_id") Integer node_id) {
         List<Node> list = nodeService.selectChildNodesById(node_id);
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**
@@ -77,7 +75,7 @@ public class NodeController {
      */
     @GetMapping("/selectChilds1/{node_id}")
     public List<Node> selectChildNodesById1(@PathVariable("node_id") Integer node_id) {
-        return toTree.listToTree(nodeService.selectChildNodesById1(node_id));
+        return ToTree.listToTree(nodeService.selectChildNodesById1(node_id));
     }
 
     /**
@@ -90,7 +88,7 @@ public class NodeController {
     @GetMapping(value = "/findNodes/{node_name}")
     public List<Node> findNodesByName(@PathVariable("node_name") String node_name, @NotNull Integer node_id) {
         List<Node> list = nodeService.findNodesByName(node_name, node_id);
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**

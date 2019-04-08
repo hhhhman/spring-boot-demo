@@ -11,7 +11,7 @@ import com.demo.mapper.NodeMapper;
 import com.demo.service.NodeService;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class NodeServiceImpl implements NodeService {
 
     @Autowired
@@ -36,6 +36,7 @@ public class NodeServiceImpl implements NodeService {
 
 
     //	点击一次 查询一次子结点
+    @Override
     public List<Node> selectChildNodesById(Integer node_id) {
         List<Node> childList = nodeMapper.selectChildNodesById(node_id);
         List<Node> grandsonList = new ArrayList<>();
@@ -66,7 +67,7 @@ public class NodeServiceImpl implements NodeService {
      * levelList: 存放所有通过node_name查询到的数据的node_level levelSet: 存放所查到的若干子结点到根结点的路径
      * resultList: 存放最终结果集
      */
-
+    @Override
     public List<Node> findNodesByName(String node_name, Integer node_id) {
         String node_level = nodeMapper.selectLevelById(node_id);
         List<String> levelList = nodeMapper.selectLevelsByName(node_name, node_level);
@@ -92,6 +93,7 @@ public class NodeServiceImpl implements NodeService {
      * List<String> levelList: 存放子结点的node_level List<Integer> endList:
      * 存放node_level的尾部
      */
+    @Override
     public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         List<String> levelList = nodeMapper.selectChildLevelsById(node_id);
         System.out.println(levelList);
@@ -122,10 +124,12 @@ public class NodeServiceImpl implements NodeService {
         }
     }
 
+    @Override
     public void updateNodeById(String node_name, String node_desc, Integer node_id) {
         nodeMapper.updateNodeById(node_name, node_desc, node_id);
     }
 
+    @Override
     public void deleteNodeById(Integer node_id) {
         String node_level = nodeMapper.selectLevelById(node_id);
         if (node_level.matches("/^[0-9]+.*/")) {

@@ -11,7 +11,7 @@ import com.demo.bean.Users;
 import com.demo.service.UsersService;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UsersServiceImpl implements UsersService {
 
 	@Autowired
