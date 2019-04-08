@@ -6,6 +6,13 @@ import org.apache.ibatis.annotations.*;
 
 import com.demo.bean.Node;
 
+/**
+ * @ClassName NodeMapper
+ * @Description 节点mapper
+ * @Author hyj
+ * @Date 2019/4/8 10:39
+ * @Version 1.0
+ */
 public interface NodeMapper {
 
 

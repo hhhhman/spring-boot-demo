@@ -5,6 +5,13 @@ import java.util.List;
 import com.demo.bean.Users;
 import org.apache.ibatis.annotations.*;
 
+/**
+ * @ClassName UsersMapper
+ * @Description 用户mapper层接口
+ * @Author hyj
+ * @Date 2019/4/8 10:42
+ * @Version 1.0
+ */
 public interface UsersMapper {
 
 	/**

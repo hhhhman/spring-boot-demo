@@ -12,6 +12,13 @@ import com.demo.util.ToTree;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * @ClassName NodeController
+ * @Description node控制器
+ * @Author hyj
+ * @Date 2019/4/8 10:39
+ * @Version 1.0
+ */
 @RestController
 @RequestMapping("/node")
 @Validated

@@ -10,6 +10,13 @@ import com.demo.mapper.UsersMapper;
 import com.demo.bean.Users;
 import com.demo.service.UsersService;
 
+/**
+ * @ClassName UsersServiceImpl
+ * @Description 用户service层实现类
+ * @Author hyj
+ * @Date 2019/4/8 10:42
+ * @Version 1.0
+ */
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UsersServiceImpl implements UsersService {

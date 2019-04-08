@@ -4,6 +4,13 @@ import java.util.List;
 
 import com.demo.bean.Node;
 
+/**
+ * @ClassName NodeService
+ * @Description service层接口
+ * @Author hyj
+ * @Date 2019/4/8 10:40
+ * @Version 1.0
+ */
 public interface NodeService {
 
     /**
