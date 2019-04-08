@@ -4,7 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 
-
+/**
+ * @ClassName Node
+ * @Description 节点实体类
+ * @Author hyj
+ * @Date 2019/4/8 10:38
+ * @Version 1.0
+ */
 public class Node implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -14,16 +20,10 @@ public class Node implements Serializable{
 	private String node_desc;
 	private String node_state;
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	private Integer node_pid;
-	private String title;
+
 
 	private List<Node> children;
 

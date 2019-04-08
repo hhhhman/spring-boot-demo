@@ -1,12 +1,21 @@
 package com.demo.bean;
 
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * @ClassName Users
+ * @Description 用户实体类
+ * @Author hyj
+ * @Date 2019/4/8 10:41
+ * @Version 1.0
+ */
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
+    @NotNull
     private Integer n_id;
     private String n_name;
     private String n_role;

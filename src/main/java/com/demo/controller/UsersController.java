@@ -10,6 +10,13 @@ import com.demo.service.UsersService;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @ClassName UsersController
+ * @Description 用户控制层
+ * @Author hyj
+ * @Date 2019/4/8 10:41
+ * @Version 1.0
+ */
 @RestController
 @RequestMapping("/users")
 public class UsersController {

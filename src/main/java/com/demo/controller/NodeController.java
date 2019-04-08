@@ -3,14 +3,25 @@ package com.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.demo.bean.Node;
 import com.demo.service.NodeService;
-import com.demo.util.toTree;
+import com.demo.util.ToTree;
 
+import javax.validation.constraints.NotNull;
+
+/**
+ * @ClassName NodeController
+ * @Description node控制器
+ * @Author hyj
+ * @Date 2019/4/8 10:39
+ * @Version 1.0
+ */
 @RestController
 @RequestMapping("/node")
+@Validated
 public class NodeController {
     @Autowired
     private NodeService nodeService;
@@ -21,7 +32,7 @@ public class NodeController {
     @GetMapping("/knowledgeTree")
     public List<Node> findNodeAll() {
         List<Node> list = this.nodeService.findNodeAll();
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**
@@ -44,7 +55,7 @@ public class NodeController {
      */
     @PostMapping("/addNode")
     public String addNode(String node_name, String node_desc) {
-        int ret = this.nodeService.addNode(node_name, node_desc);
+        int ret = this.nodeService.addNode(node_name.trim(), node_desc.trim());
         if (ret == 1) {
             return "success";
         }
@@ -60,7 +71,7 @@ public class NodeController {
     @GetMapping("/selectChilds/{node_id}")
     public List<Node> selectChildNodesById(@PathVariable("node_id") Integer node_id) {
         List<Node> list = nodeService.selectChildNodesById(node_id);
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**
@@ -71,7 +82,7 @@ public class NodeController {
      */
     @GetMapping("/selectChilds1/{node_id}")
     public List<Node> selectChildNodesById1(@PathVariable("node_id") Integer node_id) {
-        return nodeService.selectChildNodesById1(node_id);
+        return ToTree.listToTree(nodeService.selectChildNodesById1(node_id));
     }
 
     /**
@@ -82,10 +93,9 @@ public class NodeController {
      * @return  返回查询到的节点数组
      */
     @GetMapping(value = "/findNodes/{node_name}")
-    public List<Node> findNodesByName(@PathVariable("node_name") String node_name,
-                                      Integer node_id) {
+    public List<Node> findNodesByName(@PathVariable("node_name") String node_name, @NotNull Integer node_id) {
         List<Node> list = nodeService.findNodesByName(node_name, node_id);
-        return toTree.listToTree(list);
+        return ToTree.listToTree(list);
     }
 
     /**
@@ -97,13 +107,12 @@ public class NodeController {
      * @return  增加成功返回success，失败返回error
      */
     @PostMapping(value = "/insertNode")
-    public String insertChildNode(Integer node_id, String node_name, String node_desc) {
+    public Integer insertChildNode(Integer node_id, String node_name, String node_desc) {
         try {
-            nodeService.insertChildNode(node_id, node_name, node_desc);
-            return "success";
+            return nodeService.insertChildNode(node_id, node_name.trim(), node_desc.trim());
         } catch (Exception e) {
             e.printStackTrace();
-            return "error";
+            return -2;
         }
 
     }
@@ -120,7 +129,7 @@ public class NodeController {
     @PutMapping("/updateNode")
     public String updateNodeById(String node_name, String node_desc, Integer node_id) {
         try {
-            nodeService.updateNodeById(node_name, node_desc, node_id);
+            nodeService.updateNodeById(node_name.trim(), node_desc.trim(), node_id);
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
